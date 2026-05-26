@@ -152,5 +152,7 @@ def index():
                     result_prediction = None
     return render_template_string(HTML, tournaments=tournaments, selected_key=selected_key, matches=matches, selected_match_key=selected_match_key, odds=odds, result_prediction=result_prediction)
 
+import os
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
