@@ -51,7 +51,13 @@ HTML = '''
                                     </select>
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-success">Show Pre-Match Odds</button>
+                                    <button type="submit" id="oddsBtn" class="btn btn-success">Show Pre-Match Odds</button>
+                                </div>
+                                <div id="loadingIndicator" class="text-center mt-3" style="display:none;">
+                                    <div class="spinner-border text-success" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">Fetching pre-match odds, please wait...</p>
                                 </div>
                             {% endif %}
                         </form>
@@ -81,6 +87,18 @@ HTML = '''
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var matchKey = document.querySelector('select[name="match_key"]');
+            var oddsBtn = document.getElementById('oddsBtn');
+            var loader = document.getElementById('loadingIndicator');
+            if (matchKey && matchKey.value && oddsBtn && loader) {
+                oddsBtn.disabled = true;
+                oddsBtn.innerHTML = 'Loading...';
+                loader.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
 '''
