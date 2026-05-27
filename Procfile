@@ -1,1 +1,1 @@
-web: gunicorn tournament_selector:app
+web: gunicorn app:app
