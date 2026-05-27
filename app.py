@@ -77,9 +77,17 @@ input{display:block;height:50px;width:100%;background-color:rgba(255,255,255,0.0
 button{margin-top:50px;width:100%;background-color:#ffffff;color:#080710;
     padding:15px 0;font-size:18px;font-weight:600;border-radius:5px;cursor:pointer}
 button:hover{background-color:#e0e0e0}
-.switch-link{text-align:center;margin-top:20px;font-size:14px}
-.switch-link a{color:#23a2f6;text-decoration:none;font-weight:500}
-.switch-link a:hover{text-decoration:underline}
+.switch-link{text-align:center;margin-top:24px;font-size:13px;color:#d8dfeb}
+.switch-link .link-label{display:block;margin-bottom:10px;letter-spacing:0.3px}
+.switch-link .auth-link{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 14px;
+  border-radius:999px;border:1px solid rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.09);color:#ffffff;text-decoration:none;
+  font-weight:600;transition:all .2s ease
+}
+.switch-link .auth-link:hover{
+  background:rgba(255,255,255,0.22);transform:translateY(-1px)
+}
 .flash{margin-top:20px;padding:10px 15px;border-radius:5px;
     font-size:14px;text-align:center}
 .flash.error{background-color:rgba(255,80,80,0.3);border:1px solid rgba(255,80,80,0.5)}
@@ -121,7 +129,8 @@ LOGIN_HTML = """
     <input type="password" name="password" placeholder="Password" id="password" required>
     <button type="submit">Log In</button>
     <div class="switch-link">
-      Don't have an account? <a href="/register">Register</a>
+      <span class="link-label">Don't have an account?</span>
+      <a class="auth-link" href="/register">Create one now <i class="fas fa-arrow-right"></i></a>
     </div>
   </form>
 </body>
@@ -159,7 +168,8 @@ REGISTER_HTML = """
     <input type="password" name="confirm_password" placeholder="Confirm password" id="confirm_password" required>
     <button type="submit">Create Account</button>
     <div class="switch-link">
-      Already have an account? <a href="/login">Login</a>
+      <span class="link-label">Already have an account?</span>
+      <a class="auth-link" href="/login">Back to login <i class="fas fa-arrow-right"></i></a>
     </div>
   </form>
 </body>
