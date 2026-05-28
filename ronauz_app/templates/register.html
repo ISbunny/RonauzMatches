@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Register</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+  <form method="POST" action="/register">
+    <h3>Register</h3>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    <label for="username">Username</label>
+    <input type="text" name="username" placeholder="Enter username" id="username" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" placeholder="Password" id="password" required>
+    <label for="confirm_password">Confirm Password</label>
+    <input type="password" name="confirm_password" placeholder="Confirm password" id="confirm_password" required>
+    <button type="submit">Create Account</button>
+    <div class="switch-link">
+      <span class="link-label">Already have an account?</span>
+      <a class="auth-link" href="/login">Back to login <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </form>
+</body>
+</html>
