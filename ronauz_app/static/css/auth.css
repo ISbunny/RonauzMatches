@@ -10,6 +10,7 @@ body {
   background-color: #080710;
   min-height: 100vh;
   overflow-x: hidden;
+  position: relative;
 }
 
 .background {
@@ -19,6 +20,7 @@ body {
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
+  z-index: 0;
 }
 
 .background .shape {
@@ -44,6 +46,8 @@ form {
   height: auto;
   width: 400px;
   max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 28px);
+  overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.13);
   position: absolute;
   transform: translate(-50%, -50%);
@@ -54,6 +58,21 @@ form {
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
   padding: 50px 35px;
+  z-index: 1;
+}
+
+@media (max-height: 900px) {
+  form {
+    padding: 34px 24px;
+  }
+
+  label {
+    margin-top: 22px;
+  }
+
+  button {
+    margin-top: 32px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -99,21 +118,35 @@ form {
 @media (max-width: 430px), (max-height: 760px) {
   body {
     min-height: 100dvh;
-    padding: 18px 0;
+    padding: 16px 0;
   }
 
   .background {
-    display: none;
+    width: 300px;
+    height: 380px;
+    opacity: 0.9;
+  }
+
+  .background .shape {
+    width: 130px;
+    height: 130px;
+  }
+
+  .shape:first-child {
+    left: -28px;
+    top: -30px;
+  }
+
+  .shape:last-child {
+    right: -18px;
+    bottom: -34px;
   }
 
   form {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
-    margin: 0 auto;
-    width: calc(100vw - 24px);
+    width: calc(100vw - 22px);
     max-width: 360px;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
     padding: 24px 16px;
   }
 
@@ -245,4 +278,119 @@ button:hover {
 .flash.warning {
   background-color: rgba(255, 190, 80, 0.3);
   border: 1px solid rgba(255, 190, 80, 0.5);
+}
+
+/* Keep responsive overrides at end so they are not overridden by base rules above. */
+@media (max-height: 900px) {
+  form {
+    padding: 34px 24px;
+  }
+
+  label {
+    margin-top: 22px;
+  }
+
+  button {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .background {
+    width: 320px;
+    height: 420px;
+  }
+
+  .background .shape {
+    width: 150px;
+    height: 150px;
+  }
+
+  .shape:first-child {
+    left: -40px;
+    top: -40px;
+  }
+
+  .shape:last-child {
+    right: -20px;
+    bottom: -50px;
+  }
+
+  form {
+    width: min(400px, calc(100vw - 28px));
+    padding: 34px 22px;
+  }
+
+  form h3 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  label {
+    margin-top: 22px;
+  }
+
+  button {
+    margin-top: 34px;
+  }
+}
+
+@media (max-width: 430px), (max-height: 760px) {
+  body {
+    min-height: 100dvh;
+    padding: 16px 0;
+  }
+
+  .background {
+    width: 300px;
+    height: 380px;
+    opacity: 0.9;
+  }
+
+  .background .shape {
+    width: 130px;
+    height: 130px;
+  }
+
+  .shape:first-child {
+    left: -28px;
+    top: -30px;
+  }
+
+  .shape:last-child {
+    right: -18px;
+    bottom: -34px;
+  }
+
+  form {
+    width: calc(100vw - 22px);
+    max-width: 360px;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    padding: 24px 16px;
+  }
+
+  form h3 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  label {
+    margin-top: 18px;
+  }
+
+  input {
+    height: 46px;
+    font-size: 15px;
+  }
+
+  button {
+    margin-top: 24px;
+    font-size: 16px;
+    padding: 13px 0;
+  }
+
+  .switch-link {
+    margin-top: 16px;
+  }
 }
