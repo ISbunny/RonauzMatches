@@ -14,20 +14,38 @@ def get_tournaments(token):
     return resp.json().get("data", {}).get("tournaments", [])
 
 
-def get_fixtures(token, tournament_key, page=2):
-    url = f"https://api.sports.roanuz.com/v5/cricket/{current_app.config['PROJ_KEY']}/tournament/{tournament_key}/fixtures/{page}/"
-    resp = requests.get(url, headers={"rs-token": token})
+def get_fixtures(token, tournament_key, page=None, max_pages=6):
+    pages = [page] if page is not None else list(range(1, max_pages + 1))
     matches = []
-    for match in resp.json().get("data", {}).get("matches", []):
-        if match.get("status") in ("not_started", "scheduled"):
+    seen_match_keys = set()
+
+    for page_no in pages:
+        url = f"https://api.sports.roanuz.com/v5/cricket/{current_app.config['PROJ_KEY']}/tournament/{tournament_key}/fixtures/{page_no}/"
+        resp = requests.get(url, headers={"rs-token": token})
+        page_matches = resp.json().get("data", {}).get("matches", [])
+
+        if not page_matches and page is None:
+            break
+
+        for match in page_matches:
+            status = match.get("status")
+            if status not in ("not_started", "scheduled"):
+                continue
+
+            match_key = match.get("key")
+            if not match_key or match_key in seen_match_keys:
+                continue
+
+            seen_match_keys.add(match_key)
             matches.append(
                 {
                     "name": match.get("name"),
                     "venue": match.get("venue", {}).get("name", "Unknown"),
                     "start_time": match.get("start_time_str", match.get("start_time", "")),
-                    "key": match.get("key"),
+                    "key": match_key,
                 }
             )
+
     return matches
 
 

@@ -25,6 +25,12 @@ def tournament():
         if selected_key:
             matches = get_fixtures(token, selected_key)
             selected_match_key = request.form.get("match_key")
+            valid_match_keys = {m.get("key") for m in matches or []}
+
+            # Ignore stale match values posted from a previously selected tournament.
+            if selected_match_key and selected_match_key not in valid_match_keys:
+                selected_match_key = None
+
             previous_match_key = session.get("selected_match_key")
             if selected_match_key:
                 if previous_match_key and previous_match_key != selected_match_key:
