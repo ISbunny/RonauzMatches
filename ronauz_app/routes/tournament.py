@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
+from ronauz_app.services.odds_store import get_grouped_match_odds, upsert_match_odds
 from ronauz_app.services.roanuz import get_fixtures, get_prematch_odds, get_tournaments, roanuz_token
 
 
@@ -13,6 +14,7 @@ def tournament():
 
     token = roanuz_token()
     tournaments = get_tournaments(token)
+    tournaments_by_key = {item.get("key"): item for item in tournaments}
     selected_key = None
     selected_match_key = None
     matches = None
@@ -24,6 +26,7 @@ def tournament():
         selected_key = request.form.get("tournament_key")
         if selected_key:
             matches = get_fixtures(token, selected_key)
+            matches_by_key = {item.get("key"): item for item in matches}
             selected_match_key = request.form.get("match_key")
             valid_match_keys = {m.get("key") for m in matches or []}
 
@@ -43,6 +46,11 @@ def tournament():
                         key: value.get("name", key)
                         for key, value in odds["match"]["teams"].items()
                     }
+                    upsert_match_odds(
+                        tournaments_by_key.get(selected_key, {"key": selected_key, "name": selected_key}),
+                        matches_by_key.get(selected_match_key, {"key": selected_match_key, "name": selected_match_key}),
+                        odds,
+                    )
 
                 try:
                     result_prediction = [
@@ -68,4 +76,17 @@ def tournament():
         selected_match_key=selected_match_key,
         odds=odds,
         result_prediction=result_prediction,
+    )
+
+
+@tournament_bp.route("/saved-odds")
+def saved_odds():
+    if "username" not in session:
+        return redirect(url_for("auth.login"))
+
+    grouped_odds = get_grouped_match_odds()
+    return render_template(
+        "saved_odds.html",
+        username=session["username"],
+        grouped_odds=grouped_odds,
     )

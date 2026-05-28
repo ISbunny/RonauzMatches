@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Winner Percentages</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .saved-nav {
+      gap: 0.75rem;
+    }
+
+    .saved-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .saved-page-intro {
+      max-width: 720px;
+    }
+
+    .desktop-odds-table {
+      display: block;
+    }
+
+    .mobile-odds-cards {
+      display: none;
+    }
+
+    .metric-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #1f2937;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-chip.is-up {
+      background: #e8fff1;
+      color: #0f8a4b;
+    }
+
+    .metric-chip.is-down {
+      background: #fff1f2;
+      color: #c2410c;
+    }
+
+    .metric-chip.is-same {
+      background: #eef2f7;
+      color: #475569;
+    }
+
+    .metric-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .trend-note {
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .trend-note.is-up {
+      color: #0f8a4b;
+    }
+
+    .trend-note.is-down {
+      color: #c2410c;
+    }
+
+    .trend-note.is-same {
+      color: #64748b;
+    }
+
+    .mobile-match-card {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1rem;
+    }
+
+    .mobile-match-card:last-child {
+      border-bottom: 0;
+    }
+
+    .mobile-match-title {
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.35rem;
+    }
+
+    .mobile-match-meta {
+      font-size: 0.82rem;
+      color: #6b7280;
+      margin-bottom: 0.9rem;
+    }
+
+    .mobile-team-block + .mobile-team-block {
+      margin-top: 0.9rem;
+      padding-top: 0.9rem;
+      border-top: 1px dashed #d7dde6;
+    }
+
+    .mobile-team-name {
+      font-weight: 600;
+      margin-bottom: 0.55rem;
+      color: #1f2937;
+    }
+
+    .mobile-metric-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 0.45rem;
+    }
+
+    .mobile-metric-label {
+      font-size: 0.82rem;
+      color: #64748b;
+      min-width: 54px;
+    }
+
+    .mobile-updated-at {
+      margin-top: 0.9rem;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+      .saved-nav {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .saved-nav,
+      .saved-nav-actions {
+        align-items: flex-start;
+      }
+
+      .saved-nav {
+        flex-direction: column;
+      }
+
+      .saved-nav-actions {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .saved-nav-actions .btn {
+        flex: 0 0 auto;
+      }
+
+      .saved-nav-user {
+        font-size: 0.95rem;
+      }
+
+      .saved-page-intro h1 {
+        font-size: 1.45rem;
+      }
+
+      .saved-page-intro p {
+        font-size: 0.95rem;
+      }
+
+      .desktop-odds-table {
+        display: none;
+      }
+
+      .mobile-odds-cards {
+        display: block;
+      }
+
+      .metric-chip {
+        min-width: 62px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.9rem;
+      }
+
+      .metric-trend {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .trend-note {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .saved-nav-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .saved-nav-actions .btn {
+        width: 100%;
+      }
+
+      .saved-nav-user {
+        width: 100%;
+      }
+
+      .container {
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+      }
+
+      .card-header,
+      .card-body {
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+      }
+
+      .table-responsive {
+        margin-left: -0.9rem;
+        margin-right: -0.9rem;
+      }
+
+      .mobile-match-card {
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-dark bg-dark px-4 saved-nav">
+    <span class="navbar-brand fw-semibold">Roanuz Matches</span>
+    <div class="saved-nav-actions">
+      <a href="/tournament" class="btn btn-outline-info btn-sm">Back to Selector</a>
+      <span class="text-white saved-nav-user">Hi, <strong>{{ username }}</strong></span>
+      <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+  </nav>
+  <div class="container py-4 py-md-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div class="saved-page-intro">
+        <h1 class="h3 mb-1">Saved Winner Percentages</h1>
+        <p class="text-muted mb-0">One row per match. Opening winner percentages are preserved and latest percentages keep updating.</p>
+      </div>
+    </div>
+
+    {% if grouped_odds %}
+      {% for group in grouped_odds %}
+        <section class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <h2 class="h5 mb-0">{{ group.tournament_name }}</h2>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive desktop-odds-table">
+              <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Match</th>
+                    <th>Team A</th>
+                    <th>Open % A</th>
+                    <th>Latest % A</th>
+                    <th>Team B</th>
+                    <th>Open % B</th>
+                    <th>Latest % B</th>
+                    <th>Updated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for match in group.matches %}
+                    {% set open_a = match.open_winner_percentage_team_a if match.open_winner_percentage_team_a is not none else match.open_prediction_team_a %}
+                    {% set latest_a = match.latest_winner_percentage_team_a if match.latest_winner_percentage_team_a is not none else match.latest_prediction_team_a %}
+                    {% set open_b = match.open_winner_percentage_team_b if match.open_winner_percentage_team_b is not none else match.open_prediction_team_b %}
+                    {% set latest_b = match.latest_winner_percentage_team_b if match.latest_winner_percentage_team_b is not none else match.latest_prediction_team_b %}
+                    {% set delta_a = (latest_a - open_a) if latest_a is not none and open_a is not none else none %}
+                    {% set delta_b = (latest_b - open_b) if latest_b is not none and open_b is not none else none %}
+                    <tr>
+                      <td>
+                        <div class="fw-semibold">{{ match.match_name }}</div>
+                        {% if match.match_start_time %}
+                          <div class="small text-muted">{{ match.match_start_time }}</div>
+                        {% endif %}
+                      </td>
+                      <td>{{ match.team_a_name }}</td>
+                      <td>
+                        <span class="metric-chip is-same">{{ '%.1f'|format(open_a) if open_a is not none else '-' }}{% if open_a is not none %}%{% endif %}</span>
+                      </td>
+                      <td>
+                        {% set trend_a = 'is-up' if delta_a is not none and delta_a > 0 else 'is-down' if delta_a is not none and delta_a < 0 else 'is-same' %}
+                        <div class="metric-trend">
+                          <span class="metric-chip {{ trend_a }}">{{ '%.1f'|format(latest_a) if latest_a is not none else '-' }}{% if latest_a is not none %}%{% endif %}</span>
+                          {% if delta_a is not none %}
+                            <span class="trend-note {{ trend_a }}">
+                              {% if delta_a > 0 %}
+                                ▲ +{{ '%.1f'|format(delta_a) }}
+                              {% elif delta_a < 0 %}
+                                ▼ {{ '%.1f'|format(delta_a) }}
+                              {% else %}
+                                No change
+                              {% endif %}
+                            </span>
+                          {% endif %}
+                        </div>
+                      </td>
+                      <td>{{ match.team_b_name }}</td>
+                      <td>
+                        <span class="metric-chip is-same">{{ '%.1f'|format(open_b) if open_b is not none else '-' }}{% if open_b is not none %}%{% endif %}</span>
+                      </td>
+                      <td>
+                        {% set trend_b = 'is-up' if delta_b is not none and delta_b > 0 else 'is-down' if delta_b is not none and delta_b < 0 else 'is-same' %}
+                        <div class="metric-trend">
+                          <span class="metric-chip {{ trend_b }}">{{ '%.1f'|format(latest_b) if latest_b is not none else '-' }}{% if latest_b is not none %}%{% endif %}</span>
+                          {% if delta_b is not none %}
+                            <span class="trend-note {{ trend_b }}">
+                              {% if delta_b > 0 %}
+                                ▲ +{{ '%.1f'|format(delta_b) }}
+                              {% elif delta_b < 0 %}
+                                ▼ {{ '%.1f'|format(delta_b) }}
+                              {% else %}
+                                No change
+                              {% endif %}
+                            </span>
+                          {% endif %}
+                        </div>
+                      </td>
+                      <td>
+                        {% if match.last_fetched_at %}
+                          <span class="small">{{ match.last_fetched_at.strftime('%Y-%m-%d %H:%M UTC') }}</span>
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="mobile-odds-cards">
+              {% for match in group.matches %}
+                {% set open_a = match.open_winner_percentage_team_a if match.open_winner_percentage_team_a is not none else match.open_prediction_team_a %}
+                {% set latest_a = match.latest_winner_percentage_team_a if match.latest_winner_percentage_team_a is not none else match.latest_prediction_team_a %}
+                {% set open_b = match.open_winner_percentage_team_b if match.open_winner_percentage_team_b is not none else match.open_prediction_team_b %}
+                {% set latest_b = match.latest_winner_percentage_team_b if match.latest_winner_percentage_team_b is not none else match.latest_prediction_team_b %}
+                {% set delta_a = (latest_a - open_a) if latest_a is not none and open_a is not none else none %}
+                {% set delta_b = (latest_b - open_b) if latest_b is not none and open_b is not none else none %}
+                {% set trend_a = 'is-up' if delta_a is not none and delta_a > 0 else 'is-down' if delta_a is not none and delta_a < 0 else 'is-same' %}
+                {% set trend_b = 'is-up' if delta_b is not none and delta_b > 0 else 'is-down' if delta_b is not none and delta_b < 0 else 'is-same' %}
+                <article class="mobile-match-card">
+                  <div class="mobile-match-title">{{ match.match_name }}</div>
+                  {% if match.match_start_time %}
+                    <div class="mobile-match-meta">{{ match.match_start_time }}</div>
+                  {% endif %}
+
+                  <section class="mobile-team-block">
+                    <div class="mobile-team-name">{{ match.team_a_name }}</div>
+                    <div class="mobile-metric-row">
+                      <span class="mobile-metric-label">Open</span>
+                      <span class="metric-chip is-same">{{ '%.1f'|format(open_a) if open_a is not none else '-' }}{% if open_a is not none %}%{% endif %}</span>
+                    </div>
+                    <div class="mobile-metric-row">
+                      <span class="mobile-metric-label">Latest</span>
+                      <div class="metric-trend">
+                        <span class="metric-chip {{ trend_a }}">{{ '%.1f'|format(latest_a) if latest_a is not none else '-' }}{% if latest_a is not none %}%{% endif %}</span>
+                        {% if delta_a is not none %}
+                          <span class="trend-note {{ trend_a }}">
+                            {% if delta_a > 0 %}
+                              ▲ +{{ '%.1f'|format(delta_a) }}
+                            {% elif delta_a < 0 %}
+                              ▼ {{ '%.1f'|format(delta_a) }}
+                            {% else %}
+                              No change
+                            {% endif %}
+                          </span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="mobile-team-block">
+                    <div class="mobile-team-name">{{ match.team_b_name }}</div>
+                    <div class="mobile-metric-row">
+                      <span class="mobile-metric-label">Open</span>
+                      <span class="metric-chip is-same">{{ '%.1f'|format(open_b) if open_b is not none else '-' }}{% if open_b is not none %}%{% endif %}</span>
+                    </div>
+                    <div class="mobile-metric-row">
+                      <span class="mobile-metric-label">Latest</span>
+                      <div class="metric-trend">
+                        <span class="metric-chip {{ trend_b }}">{{ '%.1f'|format(latest_b) if latest_b is not none else '-' }}{% if latest_b is not none %}%{% endif %}</span>
+                        {% if delta_b is not none %}
+                          <span class="trend-note {{ trend_b }}">
+                            {% if delta_b > 0 %}
+                              ▲ +{{ '%.1f'|format(delta_b) }}
+                            {% elif delta_b < 0 %}
+                              ▼ {{ '%.1f'|format(delta_b) }}
+                            {% else %}
+                              No change
+                            {% endif %}
+                          </span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </section>
+
+                  <div class="mobile-updated-at">
+                    {% if match.last_fetched_at %}
+                      Updated {{ match.last_fetched_at.strftime('%Y-%m-%d %H:%M UTC') }}
+                    {% else %}
+                      Updated -
+                    {% endif %}
+                  </div>
+                </article>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info mb-0">No saved winner percentages yet. Fetch pre-match odds from the selector page to populate this table.</div>
+    {% endif %}
+  </div>
+</body>
+</html>
