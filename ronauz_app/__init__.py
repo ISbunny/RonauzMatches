@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from dotenv import load_dotenv
 
 from .db import init_mongo
 from .routes.auth import auth_bp
@@ -8,6 +9,8 @@ from .routes.tournament import tournament_bp
 
 
 def create_app():
+    load_dotenv()
+
     app = Flask(__name__)
     app.secret_key = os.environ.get("SECRET_KEY", "change-this-in-production")
 

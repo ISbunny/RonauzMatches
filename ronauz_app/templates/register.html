@@ -27,11 +27,24 @@
     <input type="password" name="password" placeholder="Password" id="password" required>
     <label for="confirm_password">Confirm Password</label>
     <input type="password" name="confirm_password" placeholder="Confirm password" id="confirm_password" required>
-    <button type="submit">Create Account</button>
+    <button type="submit" class="submit-btn">
+      <span class="btn-text">Create Account</span>
+      <span class="btn-spinner" aria-hidden="true"></span>
+    </button>
     <div class="switch-link">
       <span class="link-label">Already have an account?</span>
       <a class="auth-link" href="/login">Back to login <i class="fas fa-arrow-right"></i></a>
     </div>
   </form>
+  <script>
+    document.querySelector('form').addEventListener('submit', function() {
+      var submitBtn = this.querySelector('button[type="submit"]');
+      if (!submitBtn) {
+        return;
+      }
+      submitBtn.classList.add('is-loading');
+      submitBtn.disabled = true;
+    });
+  </script>
 </body>
 </html>

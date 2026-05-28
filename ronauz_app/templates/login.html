@@ -25,11 +25,24 @@
     <input type="text" name="username" placeholder="Enter username" id="username" required>
     <label for="password">Password</label>
     <input type="password" name="password" placeholder="Password" id="password" required>
-    <button type="submit">Log In</button>
+    <button type="submit" class="submit-btn">
+      <span class="btn-text">Log In</span>
+      <span class="btn-spinner" aria-hidden="true"></span>
+    </button>
     <div class="switch-link">
       <span class="link-label">Don't have an account?</span>
       <a class="auth-link" href="/register">Create one now <i class="fas fa-arrow-right"></i></a>
     </div>
   </form>
+  <script>
+    document.querySelector('form').addEventListener('submit', function() {
+      var submitBtn = this.querySelector('button[type="submit"]');
+      if (!submitBtn) {
+        return;
+      }
+      submitBtn.classList.add('is-loading');
+      submitBtn.disabled = true;
+    });
+  </script>
 </body>
 </html>

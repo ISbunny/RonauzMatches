@@ -225,6 +225,42 @@ button:hover {
   background-color: #e0e0e0;
 }
 
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.submit-btn .btn-text {
+  color: inherit;
+}
+
+.submit-btn .btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(8, 7, 16, 0.25);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  display: none;
+  animation: auth-spin 0.75s linear infinite;
+}
+
+.submit-btn.is-loading {
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.submit-btn.is-loading .btn-spinner {
+  display: inline-block;
+}
+
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .switch-link {
   text-align: center;
   margin-top: 24px;
