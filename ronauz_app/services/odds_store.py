@@ -122,7 +122,7 @@ def get_grouped_match_odds():
     current_group = None
 
     cursor = collection.find({}, {"_id": 0}).sort(
-        [("tournament_name", 1), ("match_start_time", 1), ("match_name", 1)]
+        [("tournament_name", 1), ("last_fetched_at", 1), ("match_name", 1)]
     )
     for row in cursor:
         tournament_key = row.get("tournament_key")
